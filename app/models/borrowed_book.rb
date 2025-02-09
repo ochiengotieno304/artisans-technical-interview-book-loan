@@ -2,7 +2,7 @@ class BorrowedBook < ApplicationRecord
   belongs_to :user
   belongs_to :book
 
-  before_create :set_default_return_date
+  before_create :set_default_due_date
 
   private
 

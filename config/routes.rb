@@ -1,5 +1,15 @@
 Rails.application.routes.draw do
-  resources :books
+  resources :books do
+    member do
+      post :borrow
+      post :return
+    end
+
+    collection do
+      get :available
+      get :borrowed
+    end
+  end
   resource :session
   resources :passwords, param: :token
   resource :registration, only: %i[new create]

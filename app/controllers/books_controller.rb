@@ -57,6 +57,30 @@ class BooksController < ApplicationController
     end
   end
 
+  def borrow
+    book = Book.find(params[:id])
+    book.update_attribute(:available, false)
+    BorrowedBook.create!(user: current_user, book: book)
+    redirect_to borrowed_books_path, notice: "Borrowed book."
+  end
+
+  def return
+    book = Book.find(params[:id])
+    book.update_attribute(:available, true)
+    BorrowedBook.find_by!(user: current_user, book: book).destroy!
+    redirect_to borrowed_books_path, notice: "Returned book."
+  end
+
+  def borrowed
+    @books = current_user.books
+    render :index
+  end
+
+  def available
+    @books = Book.where(available: true)
+    render :index
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_book

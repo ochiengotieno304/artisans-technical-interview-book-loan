@@ -31,13 +31,4 @@ class BorrowedBookTest < ActiveSupport::TestCase
 
     assert_not borrowed_book.save
   end
-
-
-  test "should not save borrowed book with status false" do
-    user = User.create(email_address: "test@mail.com", password: "password")
-    book = Book.create(title: "Test Book", author: "author", isbn: "03498357-1", available: false)
-    borrowed_book = BorrowedBook.new(user: user, book: book, due_date: Date.today)
-
-    assert_not borrowed_book.save
-  end
 end

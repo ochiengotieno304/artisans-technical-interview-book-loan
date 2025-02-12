@@ -3,9 +3,9 @@
 one:
   title: MyString
   author: MyString
-  isbn: MyString
+  isbn: ISBN-1234
 
 two:
   title: MyString
   author: MyString
-  isbn: MyString
+  isbn: ISBN-5678

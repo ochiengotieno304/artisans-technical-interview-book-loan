@@ -5,6 +5,7 @@ class Book < ApplicationRecord
   validates_presence_of :title
   validates_presence_of :author
   validates_presence_of :isbn
+  validates_uniqueness_of :isbn
 
   before_create :set_available
 

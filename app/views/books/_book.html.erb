@@ -1,38 +1,35 @@
-<div id="<%= dom_id book %>">
-  <p>
-    <strong>Title:</strong>
-    <%= book.title %>
-  </p>
+<div id="<%= dom_id book %>" class="card-text">
+  <h5 class="card-title mb-3"><%= book.title %></h5>
+  
+  <div class="mb-2">
+    <small class="text-muted">Author:</small>
+    <div class="fw-semibold"><%= book.author %></div>
+  </div>
 
-  <p>
-    <strong>Author:</strong>
-    <%= book.author %>
-  </p>
+  <div class="mb-2">
+    <small class="text-muted">ISBN:</small>
+    <div class="fw-semibold"><%= book.isbn %></div>
+  </div>
 
-  <p>
-    <strong>Isbn:</strong>
-    <%= book.isbn %>
-  </p>
+  <div class="mb-3">
+    <span class="badge <%= book.available ? 'bg-success' : 'bg-warning' %>">
+      <%= book.available ? 'Available' : 'Borrowed' %>
+    </span>
+  </div>
 
-  <p>
-    <strong>Available:</strong>
-    <%= book.available %>
-  </p>
-
-      <p>
-
-  <%if book.available %>
-        <%= button_to "Borrow Book", 
-          borrow_book_path(book),
-          method: :post, 
-          data: { turbo_confirm: "Are you sure you want to borrow this book?" } %>
-    <%else%>
-        <%= button_to "Return Book", 
-          return_book_path(book),
-          method: :post, 
-          data: { turbo_confirm: "Are you sure you want to return this book?" } %>
-    <%end%>
-      </p>
-
-
+  <div class="d-grid gap-2">
+    <% if book.available %>
+      <%= button_to "Borrow Book", 
+        borrow_book_path(book),
+        method: :post,
+        class: "btn btn-success",
+        data: { turbo_confirm: "Are you sure you want to borrow this book?" } %>
+    <% elsif book.borrowed_books.exists?(user: current_user) %>
+      <%= button_to "Return Book", 
+        return_book_path(book),
+        method: :post,
+        class: "btn btn-warning",
+        data: { turbo_confirm: "Are you sure you want to return this book?" } %>
+    <% end %>
+  </div>
 </div>

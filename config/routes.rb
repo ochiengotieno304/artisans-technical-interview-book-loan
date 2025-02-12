@@ -6,7 +6,6 @@ Rails.application.routes.draw do
     end
 
     collection do
-      get :available
       get :borrowed
     end
   end

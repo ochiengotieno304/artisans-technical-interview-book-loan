@@ -6,6 +6,7 @@ class BooksController < ApplicationController
     @books = Book.all
   end
 
+
   # GET /books/1 or /books/1.json
   def show
   end
@@ -59,35 +60,46 @@ class BooksController < ApplicationController
 
   def borrow
     book = Book.find(params[:id])
-    book.update_attribute(:available, false)
-    BorrowedBook.create!(user: current_user, book: book)
-    redirect_to borrowed_books_path, notice: "Borrowed book."
+    if book.available?
+      book.update!(available: false)
+
+      BorrowedBook.create!(
+        user: current_user,
+        book: book,
+        due_date: 14.days.from_now
+      )
+
+      redirect_to borrowed_books_path, notice: "Borrowed book."
+    else
+      redirect_to books_path, alert: "Book is not available."
+    end
   end
+
 
   def return
-    book = Book.find(params[:id])
-    book.update_attribute(:available, true)
-    BorrowedBook.find_by!(user: current_user, book: book).destroy!
-    redirect_to borrowed_books_path, notice: "Returned book."
+    borrowed_book = BorrowedBook.find_by(user: current_user, book_id: params[:id])
+
+    if borrowed_book
+      borrowed_book.book.update!(available: true)
+      borrowed_book.destroy!
+      redirect_to borrowed_books_path, notice: "Returned book."
+    else
+      redirect_to borrowed_books_path, alert: "You cannot return a book you haven't borrowed."
+    end
   end
+
 
   def borrowed
-    @books = current_user.books
+    @books = Book.joins(:borrowed_books).where(borrowed_books: { user: current_user })
     render :index
   end
 
-  def available
-    @books = Book.where(available: true)
-    render :index
-  end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_book
       @book = Book.find(params.expect(:id))
     end
 
-    # Only allow a list of trusted parameters through.
     def book_params
       params.expect(book: [ :title, :author, :isbn ])
     end

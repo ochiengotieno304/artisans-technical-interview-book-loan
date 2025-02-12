@@ -10,6 +10,9 @@
 
 require "faker"
 
-5.times do
+10.times do
   Book.find_or_create_by!(title: Faker::Book.title, author: Faker::Book.author, isbn: Faker::Code.isbn, available: true)
 end
+
+
+User.find_or_create_by!(email_address: "test@example.com", password_digest: BCrypt::Password.create("password"))

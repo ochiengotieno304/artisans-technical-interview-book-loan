@@ -3,7 +3,7 @@
 ## Setup 
 
 ```bash
-    git clone https://github.com/ochiengotieno304/artisans-technical-interview-book-loan.gi
+    git clone https://github.com/ochiengotieno304/artisans-technical-interview-book-loan.git
     cd artisans-technical-interview-book-loan
     bundle install
     rails db:migrate
